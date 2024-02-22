@@ -78,7 +78,7 @@ class SettingsPanel(Screen):
         yield Button("Back", variant="error", id="settings_back")
 
 
-class PyCrackMC(App):
+class PyCrackedMC(App):
     BINDINGS = [("d", "toggle_dark", "Toggle Dark Mode"), ("q", "quit", "Quit")]
     SCREENS = {
         "login": LoginPanel(),
