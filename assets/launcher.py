@@ -99,10 +99,5 @@ class PyCrackMC(App):
 
 
 if __name__ == "__main__":
-    if os.path.exists(path):
-        print("[INFO] assets folder exists, continuing")
-    else:
-        print("[INFO] assets folder does not exist, creating and continuing")
-        os.mkdir(path)
     app = PyCrackMC()
     app.run()
