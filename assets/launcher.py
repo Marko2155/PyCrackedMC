@@ -99,5 +99,5 @@ class PyCrackedMC(App):
 
 
 if __name__ == "__main__":
-    app = PyCrackMC()
+    app = PyCrackedMC()
     app.run()
