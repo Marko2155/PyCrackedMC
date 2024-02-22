@@ -47,16 +47,17 @@ class LoginPanel(Screen):
                 options["username"] = uname
             install.install_minecraft_version(minecraft_version, minecraft_directory)
             minecraft_command = command.get_minecraft_command(minecraft_version, minecraft_directory, options)
-            if os.path.exists("./assets/mc.log"):
-                os.remove("./assets/mc.log")
-                logfile = open("./assets/mc.log", "x")
+            if os.path.exists("./mc.log"):
+                os.remove("./mc.log")
+                logfile = open("./mc.log", "x")
             else:
-                logfile = open("./assets/mc.log", "x")
+                logfile = open("./mc.log", "x")
             subprocess.run(minecraft_command, stdout=logfile)
 
     def compose(self) -> ComposeResult:
         uname = Input(placeholder="Username", type="text", id="username")
         yield uname
+        yield Label("Version: " + str(minecraft_version))
         yield Button("Play", id="play", variant="success")
         yield Button("Settings", id="settings")
 
@@ -79,7 +80,6 @@ class SettingsPanel(Screen):
 
 class PyCrackMC(App):
     BINDINGS = [("d", "toggle_dark", "Toggle Dark Mode"), ("q", "quit", "Quit")]
-    CSS_PATH = "assets/launcher.tcss"
     SCREENS = {
         "login": LoginPanel(),
         "settings": SettingsPanel(),
