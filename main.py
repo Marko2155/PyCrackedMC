@@ -25,6 +25,7 @@ def create_run_launcher():
     with open("./assets/changeUsername.py", "x") as f:
         f.write(changeUsernameCode)
         f.close()
+    print("Finished")
     subprocess.run([sys.executable, "./assets/launcher.py"])
 
 try:
