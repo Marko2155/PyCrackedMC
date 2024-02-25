@@ -6,32 +6,20 @@ from textual.containers import *
 from textual.screen import *
 from minecraft_launcher_lib import *
 import webbrowser
+import random
+import subprocess
+import os
 
-error = ""
-uname = ""
-path = "assets/"
+path = os.getcwd()
+
 minecraft_directory = utils.get_minecraft_directory()
 minecraft_version = utils.get_latest_version()["release"]
 
 options = {
-    "username": "player",
+    "username": "PCMPlayer" + str(random.randrange(0, 10000)),
     "uuid": "30c807a0-7d6d-44cf-960b-a7e8c1bafc7c",
     "token": "pineapple-pizza"
 }
-
-
-class ErrorWidget(Static):
-    def compose(self) -> ComposeResult:
-        yield Label("Error!", id="error-label")
-        yield Label(error, id="error-text")
-
-
-class ErrorPanel(Screen):
-
-    def compose(self) -> ComposeResult:
-        yield Header()
-        yield Footer()
-        yield Center(ErrorWidget())
 
 
 class LoginPanel(Screen):
@@ -41,22 +29,22 @@ class LoginPanel(Screen):
             app.pop_screen()
             app.push_screen("settings")
         elif event.button.id == "play":
-            if uname == "":
-                options["username"] = "player"
+            if os.path.exists(path + "username"):
+                options["username"] = open(path + "username", "rt").read()
             else:
-                options["username"] = uname
+                with open(path + "username", "x") as unameFile:
+                    unameFile.write(options["username"])
+                    unameFile.close()
             install.install_minecraft_version(minecraft_version, minecraft_directory)
             minecraft_command = command.get_minecraft_command(minecraft_version, minecraft_directory, options)
-            if os.path.exists("./mc.log"):
-                os.remove("./mc.log")
-                logfile = open("./mc.log", "x")
+            if os.path.exists(path + "mc.log"):
+                os.remove(path + "mc.log")
+                logfile = open(path + "mc.log", "x")
             else:
-                logfile = open("./mc.log", "x")
+                logfile = open(path + "mc.log", "x")
             subprocess.run(minecraft_command, stdout=logfile)
 
     def compose(self) -> ComposeResult:
-        uname = Input(placeholder="Username", type="text", id="username")
-        yield uname
         yield Label("Version: " + str(minecraft_version))
         yield Button("Play", id="play", variant="success")
         yield Button("Settings", id="settings")
@@ -70,20 +58,22 @@ class SettingsPanel(Screen):
             app.push_screen("login")
         elif event.button.id == "open-minecraft-dir":
             webbrowser.open('file:///' + minecraft_directory)
+        elif event.button.id == "change-username":
+            subprocess.run([sys.executable, path + "changeUsername.py"])
 
     def compose(self) -> ComposeResult:
         yield Header()
         yield Footer()
         yield Button("Open .minecraft directory", id="open-minecraft-dir")
+        yield Button("Change username", id="change-username", variant="success")
         yield Button("Back", variant="error", id="settings_back")
 
 
-class PyCrackedMC(App):
+class PyCrackMC(App):
     BINDINGS = [("d", "toggle_dark", "Toggle Dark Mode"), ("q", "quit", "Quit")]
     SCREENS = {
         "login": LoginPanel(),
-        "settings": SettingsPanel(),
-        "error": ErrorPanel()
+        "settings": SettingsPanel()
     }
 
     def action_toggle_dark(self) -> None:
@@ -99,5 +89,9 @@ class PyCrackedMC(App):
 
 
 if __name__ == "__main__":
-    app = PyCrackedMC()
+    if path.endswith("assets"):
+        path = "./"
+    else:
+        path = "assets/"
+    app = PyCrackMC()
     app.run()
