@@ -15,8 +15,12 @@ root.resizable(False, False)
 root.geometry("250x100")
 label = tk.Label(root, text="New username:")
 label.pack()
-entry = tk.Entry(root)
+entry_variable = tk.StringVar()
+entry = tk.Entry(root, textvariable=entry_variable)
 entry.pack()
+
+if os.path.exists(path + "username"):
+    entry_variable.set(open(path + "username", "r").read())
 
 
 def changeUsername():
