@@ -22,14 +22,15 @@ if path.endswith("assets"):
 else:
     path = "assets/"
 
+if os.path.exists(path + "username"):
+    options["username"] = open(path + "username", "rt").read()
+else:
+    with open(path + "username", "x") as unameFile:
+        unameFile.write(options["username"])
+        unameFile.close()
+
 
 def launch_minecraft():
-    if os.path.exists(path + "username"):
-        options["username"] = open(path + "username", "rt").read()
-    else:
-        with open(path + "username", "x") as unameFile:
-            unameFile.write(options["username"])
-            unameFile.close()
     install.install_minecraft_version(minecraft_version, minecraft_directory)
     minecraft_command = command.get_minecraft_command(minecraft_version, minecraft_directory, options)
     subprocess.run(minecraft_command)
@@ -44,6 +45,8 @@ root.title("PyCraft Launcher")
 root.geometry("250x100")
 version_label = tk.Label(root, text="Version: " + minecraft_version)
 version_label.pack()
+username_label = tk.Label(root, text="Username: " + options["username"])
+username_label.pack()
 play_button = tk.Button(root, text="Play", command=launch_minecraft)
 play_button.pack()
 settings_button = tk.Button(root, text="Settings", command=openSettings)
