@@ -22,14 +22,19 @@ def exitProg():
 def openMinecraftDir():
     webbrowser.open('file:///' + minecraft_directory)
 
+def openVersion():
+    subprocess.run([sys.executable, path + "changeVersion.py"])
+
 root = tk.Tk()
 root.title("Settings")
-root.geometry("250x100")
+root.geometry("250x150")
 root.resizable(False, False)
 openminecraftdir = tk.Button(root, text="Open .minecraft directory", command=openMinecraftDir)
 openminecraftdir.pack()
 changeusername_button = tk.Button(root, text="Change username", command=openUser)
 changeusername_button.pack()
+changeversion_button = tk.Button(root, text="Change version", command=openVersion)
+changeversion_button.pack()
 back_button = tk.Button(root, text="Back", command=exitProg)
 back_button.pack()
 
