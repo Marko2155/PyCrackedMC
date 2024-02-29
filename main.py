@@ -17,6 +17,9 @@ def create_run_launcher():
     if os.path.exists("assets/changeUsername.py"):
         print("Reinstalling changeUsername.py")
         os.remove("assets/changeUsername.py")
+    if os.path.exists("assets/changeVersion.py"):
+        print("Reinstalling changeVersion.py")
+        os.remove("assets/changeVersion.py")
     url1 = launcher_link
     res1 = req.get(url1)
     launcherCode = res1.text
@@ -33,11 +36,17 @@ def create_run_launcher():
         with open("assets/settings.py", "x") as f:
             f.write(settingsCode)
             f.close()
+    url4 = "https://raw.githubusercontent.com/Marko2155/PyCrackedMC/main/assets/changeVersion.py"
+    res4 = req.get(url4)
+    changeVersionCode = res4.text
     with open("./assets/launcher.py", "x") as f:
         f.write(launcherCode)
         f.close()
     with open("assets/changeUsername.py", "x") as f:
         f.write(changeUsernameCode)
+        f.close()
+    with open("assets/changeVersion.py", "x") as f:
+        f.write(changeVersionCode)
         f.close()
     print("Finished")
     subprocess.run([sys.executable, "./assets/launcher.py"])
