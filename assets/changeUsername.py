@@ -12,7 +12,7 @@ else:
 root = tk.Tk()
 root.title("Change Username")
 root.resizable(False, False)
-root.geometry("250x100")
+root.geometry("250x150")
 label = tk.Label(root, text="New username:")
 label.pack()
 entry_variable = tk.StringVar()
@@ -33,17 +33,25 @@ def changeUsername():
         with open(path + "username", "x") as usernameFile:
             usernameFile.write(username)
             usernameFile.close()
-            root.destroy()
+    root.destroy()
 
 
 def exitProg():
     exit(0)
 
 
+def generate():
+    if os.path.exists(path + "username"):
+        os.remove(path + "username")
+    root.destroy()
+
+
 cancel = tk.Button(root, text="Cancel", command=exitProg)
+generate = tk.Button(root, text="Generate Random", command=generate)
 ok = tk.Button(root, text="Ok", command=changeUsername)
 
 ok.pack()
+generate.pack()
 cancel.pack()
 
 root.mainloop()
