@@ -1,6 +1,6 @@
-import sys
 import tkinter as tk
 from minecraft_launcher_lib import *
+import tkinter.messagebox as tkm
 import random
 import subprocess
 import os
@@ -8,7 +8,7 @@ import sys
 
 # New Tkinter Launcher
 
-minecraft_version = utils.get_latest_version()["release"]
+
 minecraft_directory = utils.get_minecraft_directory()
 path = os.getcwd()
 options = {
@@ -21,6 +21,12 @@ if path.endswith("assets"):
     path = "./"
 else:
     path = "assets/"
+
+if os.path.exists(path + "version"):
+    minecraft_version = open(path + "version").read()
+else:
+    minecraft_version = utils.get_latest_version()["release"]
+
 
 if os.path.exists(path + "username"):
     options["username"] = open(path + "username", "rt").read()
@@ -37,7 +43,11 @@ def launch_minecraft():
 
 
 def openSettings():
-    subprocess.run([sys.executable, path + "settings.py"])
+    p1 = subprocess.Popen([sys.executable, path + "settings.py"])
+    p1.wait()
+    tkm.showinfo("Information", "Restarting PyCraft Launcher so the changes can take effect")
+    subprocess.Popen([sys.executable, path + "launcher.py"])
+    exit(0)
 
 
 root = tk.Tk()
